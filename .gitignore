@@ -1,0 +1,8 @@
+__pycache__
+.idea/
+escpos/
+iow/
+RPi/
+venv/
+board.py
+neopixel.py
