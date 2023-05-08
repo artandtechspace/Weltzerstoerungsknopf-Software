@@ -2,7 +2,8 @@ import neopixel
 import asyncio as aio
 from core.CoreData import CoreData
 from peripherals.PeripheralConfig import Outputs
-import Config
+from config.ConfigSystem import ConfigSystem
+
 
 async def __on_scissors_animation(pxls: neopixel.NeoPixel):
     # Animates a small countdown
@@ -32,9 +33,11 @@ Returns the constructed text to print and increments the counter
 '''
 
 
-def __get_print_text():
+def __get_print_text(config: ConfigSystem):
     # Builds the text
-    return Config.TEXT.replace("%counter%", str(Config.COUNTER))
+    return config.get().text \
+        .replace("%counter%", str(config.get().counter)) \
+        .replace("%event%", str(config.get().event))
 
 
 '''
@@ -43,16 +46,16 @@ Returns the filename of the image for the current counter
 
 
 # TODO: Implement images
-def __get_print_image():
+def __get_print_image(config: ConfigSystem):
     # Special secret number to print franz amtmann
     SPECIAL_NUMBERS = [42, 1337, 69, 333, 314, 271, 161, 911]
 
     # Checks for the special numbers
-    if Config.COUNTER in SPECIAL_NUMBERS:
+    if config.get().counter in SPECIAL_NUMBERS:
         return "amtmann.png"
 
     # Checks for a very special number
-    if Config.COUNTER == 420:
+    if config.get().counter == 420:
         return "hanf.png"
 
     # Default no special return
@@ -73,8 +76,9 @@ async def start_fire_state(core: CoreData):
     # Ensures the smoker has finished his operation
     await tsmoker
 
-    # Increments the counter
-    Config.COUNTER += 1
+    # Increments the counter and saves the config
+    core.config.get().counter += 1
+    core.config.save()
 
     # Prints the info-data
     core.printer.print_preset(text=__get_print_text(), image=__get_print_image())

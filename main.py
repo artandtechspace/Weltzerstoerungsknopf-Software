@@ -9,6 +9,9 @@ async def main():
     # Creates the core
     core = CoreData()
 
+    # Initializes the core-data (Creates all the repos etc.)
+    core.initialize()
+
     # Current state
     state = start_reset_state
 

@@ -3,6 +3,7 @@ from peripherals.SmokeDevice import SmokeDevice
 from peripherals.PrinterDevice import PrinterDevice
 from peripherals.ScissorsDevice import ScissorsDevice
 from animations.AnimationSystem import AnimationSystem
+from config.ConfigSystem import ConfigSystem
 
 # Data-class with instances of all core elements
 class CoreData:
@@ -13,3 +14,7 @@ class CoreData:
         self.printer = PrinterDevice()
         self.smoker = SmokeDevice()
         self.animations = AnimationSystem()
+        self.config = ConfigSystem()
+
+    def initialize(self):
+        self.config.initialize()
