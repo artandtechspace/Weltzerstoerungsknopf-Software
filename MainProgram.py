@@ -6,8 +6,8 @@ from loggingsystem.Logger import Logger
 
 from typing import Callable, Coroutine
 from asyncio import Task
-from peripherals.tests.PeripheralTestTypes import DeviceTestType
-
+from peripherals.tests.PeripheralTestTypes import PeripheralTestType
+from core.states.TestState import start_test_state
 
 '''
 The main Program runs inside a separate thread from the webserver
@@ -20,7 +20,7 @@ class MainProgram:
         self.__current_task: Task = None  # This will be populated after the first start
         # Function-Ptr for the current task
         self.__function_ptr: Callable[[Coroutine], CoreData] = start_reset_state
-        self.__test_type: None | DeviceTestType = None
+        self.__test_type: None | PeripheralTestType = None
         pass
 
     # Start-method to be executed from the separate thread
@@ -51,23 +51,25 @@ class MainProgram:
             self.logger.error("__on_inserted", "a test was scheduled but none was found as the test-type")
         else:
             # Executes the test
-            await self.__test_type(core)
+            await start_test_state(core, self.__test_type)
 
         return start_reset_state
 
     # Can be thread-save used to insert a test while the idle-state is running
     # :returns True if the test was scheduled and False if a different state is running
-    async def insert_test(self, type: DeviceTestType):
-        self.__test_type = type
+    async def insert_test(self, type: PeripheralTestType):
+
         # Ensures that a test is only inserted into the idle-state
         if self.__function_ptr != start_idle_state:
             return False
+
+        self.__test_type = type
 
         # Kills the main task to indicate that a test should take place
         try:
             self.__current_task.cancel()
             await self.__current_task
-        except Exception:
+        except:
             pass
 
         return True
