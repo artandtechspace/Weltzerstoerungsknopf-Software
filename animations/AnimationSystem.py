@@ -1,4 +1,4 @@
-from Logger import Logger
+from loggingsystem.Logger import Logger
 import asyncio as aio
 import board
 import neopixel

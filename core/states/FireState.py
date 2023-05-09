@@ -81,7 +81,7 @@ async def start_fire_state(core: CoreData):
     core.config.save()
 
     # Prints the info-data
-    core.printer.print_preset(text=__get_print_text(), image=__get_print_image())
+    core.printer.print_preset(text=__get_print_text(core.config), image=__get_print_image(core.config))
 
     # Waits a short time
     await aio.sleep(0.5)

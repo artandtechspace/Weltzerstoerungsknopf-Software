@@ -1,6 +1,7 @@
-from Logger import Logger
+from loggingsystem.Logger import Logger
 import RPi.GPIO as GPIO
 import asyncio as aio
+
 
 # Only a data class
 class ButtonState:

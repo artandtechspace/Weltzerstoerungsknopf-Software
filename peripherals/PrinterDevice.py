@@ -1,4 +1,4 @@
-from Logger import Logger
+from loggingsystem.Logger import Logger
 from escpos.printer import Usb
 from peripherals.PeripheralConfig import Outputs
 

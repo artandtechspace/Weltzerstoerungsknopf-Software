@@ -1,23 +1,26 @@
-import asyncio as aio
 from core.CoreData import CoreData
-from core.states.ResetState import start_reset_state
-from Logger import Logger
 
-async def main():
-    logger = Logger("Main")
+import threading
+from MainProgram import MainProgram
+from webserver.WebProgram import run_web_thread
 
-    # Creates the core
-    core = CoreData()
+# Creates the core
+core = CoreData()
+# and main program
+prog = MainProgram()
 
-    # Initializes the core-data (Creates all the repos etc.)
-    core.initialize()
 
-    # Current state
-    state = start_reset_state
+def main():
+    t_serv = threading.Thread(target=run_web_thread, args=(prog,core))
+    t_prog = threading.Thread(target=prog.start_thread, args=(core,))
 
-    while True:
-        logger.debug("main", "Starting state "+str(state.__name__))
-        # Executes and updates the state
-        state = await state(core)
+    t_serv.start()
+    t_prog.start()
 
-aio.run(main())
+    t_prog.join()
+    t_serv.join()
+
+    print("\nStarted all and everything")
+
+
+main()

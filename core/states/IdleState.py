@@ -45,15 +45,19 @@ async def __on_idle_animation(pxls: neopixel.NeoPixel):
         await rainbow_cycle(0.01)
 
 async def start_idle_state(core: CoreData):
-    # Plays the default animation
-    await core.animations.start_animation(__on_idle_animation)
 
-    # Registers the button listener to
-    # wait for the armed button
-    await ButtonListener()\
-        .wait_for_change(pin=Inputs.Buttons.GPIO_PRIME_SWITCH,to=True)\
-        .then()
+    try:
+        # Plays the default animation
+        await core.animations.start_animation(__on_idle_animation)
 
-    # Forwards to the armed state
-    from core.states.ArmedState import start_armed_state
-    return start_armed_state
+        # Registers the button listener to
+        # wait for the armed button
+        await ButtonListener() \
+            .wait_for_change(pin=Inputs.Buttons.GPIO_PRIME_SWITCH,to=True) \
+            .then()
+
+        # Forwards to the armed state
+        from core.states.ArmedState import start_armed_state
+        return start_armed_state
+    except aio.CancelledError as e:
+        pass

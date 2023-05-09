@@ -1,14 +1,15 @@
 from configurator import Config
 from voluptuous import Schema, All, Clamp
-from Logger import Logger
+from loggingsystem.Logger import Logger
 import json
+import pathlib
 
 
 class ConfigSystem:
     logger = Logger("Config")
 
     # Config file location
-    __config_file_location = "../rsc/config.json"
+    __config_file_location = str(pathlib.Path(__file__).parent.absolute())+"/../rsc/config.json"
 
     # Schema to validate the config
     __schema = Schema({
@@ -69,7 +70,7 @@ class ConfigSystem:
             with open(self.__config_file_location, "w") as f:
                 json.dump(self.__config.data, f)
         except Exception as e:
-            self.logger.error("save", ["Failed to save file...", e])
+            self.logger.error("save", ["Failed to save file...", e, self.__config_file_location])
             return False
 
     # Returns the config to get/edit data
