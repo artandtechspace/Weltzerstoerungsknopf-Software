@@ -101,4 +101,4 @@ def run_web_thread(prog: MainProgram, cr: CoreData):
     global main_program, core
     main_program = prog
     core = cr
-    app.run(debug=False, use_reloader=False)
+    app.run(debug=False, use_reloader=False, host= '0.0.0.0')
