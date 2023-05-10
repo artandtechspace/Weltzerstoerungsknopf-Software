@@ -1,9 +1,13 @@
 from loggingsystem.Logger import Logger
 from escpos.printer import Usb
 from peripherals.PeripheralConfig import Outputs
+import pathlib
 
 
 class PrinterDevice:
+    # Path to the resource-folder
+    rsc_path = str(pathlib.Path(__file__).parent.absolute()) + "/../rsc/images/"
+
     logger = Logger("PrinterDevice")
 
     def __init__(self):
@@ -15,7 +19,7 @@ class PrinterDevice:
 
     # Tries to connect the printer
     def __reconnect_printer(self):
-        self.logger.debug("__reconnect_printer","Printer is reconnecting...")
+        self.logger.debug("__reconnect_printer", "Printer is reconnecting...")
 
         self.__is_dead = True
         try:
@@ -23,7 +27,7 @@ class PrinterDevice:
             self.__printer = Usb(Outputs.Printer.VENDOR_ID, Outputs.Printer.PRODUCT_ID, 0, 4, 0x03)
             self.__is_dead = False
         except Exception as e:
-            self.logger.error("__reconnect_printer",("No printer found, retrying next time a printjob get's send", e))
+            self.logger.error("__reconnect_printer", ("No printer found, retrying next time a printjob get's send", e))
 
     '''
     Takes in the
@@ -40,11 +44,10 @@ class PrinterDevice:
         try:
             # Prints...
             # - the info text
-            self.__printer.text(text)
-            self.__printer.text("\n")
+            self.__printer.text("\n"+text+"\n")
 
             # - the image
-            self.__printer.image(image)
+            self.__printer.image(self.rsc_path+image)
             self.__printer.text("\n")
             # Finishes the print
             self.__printer.cut()
