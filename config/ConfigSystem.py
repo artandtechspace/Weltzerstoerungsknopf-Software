@@ -22,7 +22,7 @@ class ConfigSystem:
         # Loads the defaults
         self.__config = Config({
             'counter': 0,
-            'text': 'Sie sind der %counter%. der auf %event% die Welt zerstören wollte.',
+            'text': 'Sie sind der %counter%. der auf %event% die Welt zerstoeren wollte.',
             'event': "der Makerfaire",
         })
         pass
