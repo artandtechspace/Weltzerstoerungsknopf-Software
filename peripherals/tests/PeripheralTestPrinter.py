@@ -5,7 +5,7 @@ from loggingsystem.Logger import Logger
 
 # Tests the printer
 async def on_printer_test(logger: Logger, core: CoreData):
-    logger.debug("on_printer_test", "starting test")
+    logger.debug("on_printer_test", "=== starting test")
     # TODO: Implement test.png image
     core.printer.print_preset("This is a printer-test", "test.png")
-    logger.debug("on_printer_test", "ending test")
+    logger.debug("on_printer_test", "=== ending test")
