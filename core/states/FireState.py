@@ -52,11 +52,11 @@ def __get_print_image(config: ConfigSystem):
 
     # Checks for the special numbers
     if config.get().counter in SPECIAL_NUMBERS:
-        return "amtmann.png"
+        return "amtmann.jpg"
 
     # Checks for a very special number
     if config.get().counter == 420:
-        return "hanf.png"
+        return "hanf.jpg"
 
     # Default no special return
     return "explosion.png"
