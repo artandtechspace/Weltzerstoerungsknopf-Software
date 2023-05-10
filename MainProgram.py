@@ -30,7 +30,7 @@ class MainProgram:
     # Async-io start method that continuously run the next state after the previous one has finished
     async def __on_run(self, core: CoreData):
         while True:
-            self.logger.debug("main", "Starting state " + str(self.__function_ptr.__name__))
+            self.logger.state_switch("main", str(self.__function_ptr.__name__))
 
             # Executes the next task
             self.__current_task = aio.create_task(self.__function_ptr(core))

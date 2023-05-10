@@ -44,8 +44,6 @@ def __get_print_text(config: ConfigSystem):
 Returns the filename of the image for the current counter
 '''
 
-
-# TODO: Implement images
 def __get_print_image(config: ConfigSystem):
     # Special secret number to print franz amtmann
     SPECIAL_NUMBERS = [42, 1337, 69, 333, 314, 271, 161, 911]

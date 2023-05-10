@@ -27,7 +27,8 @@ class PrinterDevice:
             self.__printer = Usb(Outputs.Printer.VENDOR_ID, Outputs.Printer.PRODUCT_ID, 0, 4, 0x03)
             self.__is_dead = False
         except Exception as e:
-            self.logger.error("__reconnect_printer", ("No printer found, retrying next time a printjob get's send", e))
+            self.logger.warn_exception("__reconnect_printer", "No printer found, retrying next time a printjob get's "
+                                                              "send", e)
 
     '''
     Takes in the
@@ -38,6 +39,7 @@ class PrinterDevice:
     '''
 
     def print_preset(self, text: str, image: str):
+        self.logger.info("print_preset", "Starting to print")
         # Will fist try to connect to the printer if it knows that he is disconnected
         if self.__is_dead:
             self.__reconnect_printer()
@@ -54,5 +56,5 @@ class PrinterDevice:
 
             return
         except Exception as e:
-            self.logger.error("print_preset", ("Printing failed, trying to reconnect printer...", e))
+            self.logger.warn_exception("print_preset", "Printing failed, trying to reconnect printer", e)
             self.__reconnect_printer()

@@ -21,19 +21,19 @@ class ScissorsDevice:
             Inputs.Scissors.GPIO_OPEN
         ])
 
-
     # Stops any scissor movement
     def stop(self):
-        self.logger.debug("stop","stopping all movements")
+        self.logger.debug("stop", "stopping all movements")
         try:
             GPIO.output(Outputs.Scissors.GPIO_OPEN, 0)
             GPIO.output(Outputs.Scissors.GPIO_CLOSE, 0)
-        except:
+        except Exception as e:
+            self.logger.error_with_exception("stop", "Error while stopping!", e)
             pass
 
     # Opens the scissors and blocks until that move is completed
     async def open(self):
-        self.logger.debug("open","starting to open")
+        self.logger.info("open", "Scissors are opening")
         try:
             # Write to the outputs that the sissor should open
             GPIO.output(Outputs.Scissors.GPIO_OPEN, 1)
@@ -45,15 +45,16 @@ class ScissorsDevice:
 
             # Ends scissors movement
             self.stop()
-            self.logger.debug("open","opened")
-        except:
+            self.logger.debug("open", "opened")
+        except Exception as e:
+            self.logger.error_with_exception("close", "Exception while moving, stopping", e)
             # Unlikely to raise an error but in case it does the movement should
             # stop to prevent damage
             self.stop()
 
     # Closes the scissors and blocks until that move is completed
     async def close(self):
-        self.logger.debug("close","start closing")
+        self.logger.info("close", "Scissors are closing")
         try:
             # Write to the outputs that the scissors should close
             GPIO.output(Outputs.Scissors.GPIO_CLOSE, 1)
@@ -65,8 +66,9 @@ class ScissorsDevice:
 
             # Ends scissor movement
             self.stop()
-            self.logger.debug("close","closed")
-        except:
+            self.logger.debug("close", "closed")
+        except Exception as e:
+            self.logger.error_with_exception("close", "Exception while moving, stopping", e)
             # Unlikely to raise an error but in case it does the movement should
             # stop to prevent damage
             self.stop()

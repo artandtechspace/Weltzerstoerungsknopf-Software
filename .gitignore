@@ -7,3 +7,4 @@ venv/
 board.py
 neopixel.py
 test.py
+logs/

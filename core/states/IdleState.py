@@ -4,9 +4,9 @@ import asyncio as aio
 from core.CoreData import CoreData
 from utils.ButtonListeners import ButtonListener
 
+
 # Animation for the idle-state
 async def __on_idle_animation(pxls: neopixel.NeoPixel):
-
     # Input a value 0 to 255 to get a color value.
     # The colours are a transition r - g - b - back to r.
     def wheel(pos):
@@ -44,8 +44,8 @@ async def __on_idle_animation(pxls: neopixel.NeoPixel):
     while True:
         await rainbow_cycle(0.01)
 
-async def start_idle_state(core: CoreData):
 
+async def start_idle_state(core: CoreData):
     try:
         # Plays the default animation
         await core.animations.start_animation(__on_idle_animation)
@@ -53,7 +53,7 @@ async def start_idle_state(core: CoreData):
         # Registers the button listener to
         # wait for the armed button
         await ButtonListener() \
-            .wait_for_change(pin=Inputs.Buttons.GPIO_PRIME_SWITCH,to=True) \
+            .wait_for_change(pin=Inputs.Buttons.GPIO_PRIME_SWITCH, to=True) \
             .then()
 
         # Forwards to the armed state

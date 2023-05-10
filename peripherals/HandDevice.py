@@ -29,13 +29,12 @@ class HandDevice:
             GPIO.output(Outputs.Hand.GPIO_IN, 0)
             GPIO.output(Outputs.Hand.GPIO_OUT, 0)
             GPIO.output(Outputs.Hand.GPIO_ENABLED, 0)
-        except:
-            self.logger.error("stop", "Error while stopping!")
-            pass
+        except Exception as e:
+            self.logger.error_with_exception("stop", "Error while stopping!", e)
 
     # Opens the hand and blocks until that move is completed
     async def move_outside(self):
-        self.logger.debug("move_outside", "Start moving")
+        self.logger.info("move_outside", "Hand moves outside")
 
         try:
             # Write to the outputs that the hand should go out
@@ -53,14 +52,14 @@ class HandDevice:
             # Ends hand movement
             self.stop()
         except Exception as e:
-            self.logger.error("move_inside", ("Exception while moving, stopping: ", e))
+            self.logger.error_with_exception("move_inside", "Exception while moving, stopping", e)
             # Unlikely to raise an error but in case it does the movement should
             # stop to prevent damage
             self.stop()
 
     # Moves the hand back inside and blocks until that move is completed
     async def move_inside(self):
-        self.logger.debug("move_inside", "Start moving")
+        self.logger.info("move_inside", "Hand moves inside")
         try:
             # Write to the outputs that the hand should go in
             GPIO.output(Outputs.Hand.GPIO_ENABLED, 1)
@@ -76,7 +75,7 @@ class HandDevice:
             # Ends hand movement
             self.stop()
         except Exception as e:
-            self.logger.error("move_inside", ("Exception while moving, stopping: ", e))
+            self.logger.error_with_exception("move_inside", "Exception while moving, stopping", e)
             # Unlikely to raise an error but in case it does the movement should
             # stop to prevent damage
             self.stop()

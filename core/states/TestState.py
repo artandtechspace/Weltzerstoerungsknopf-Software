@@ -1,6 +1,4 @@
 import neopixel
-from peripherals.PeripheralConfig import Inputs
-import asyncio as aio
 from peripherals.tests.PeripheralTestTypes import PeripheralTestType
 from core.CoreData import CoreData
 from loggingsystem.Logger import Logger

@@ -57,9 +57,8 @@ async def update_config():
 
 # Sends the config data as json
 @app.route("/api/get_config", methods=["GET"])
-def get_config():
+async def get_config():
     return create_cors_resp(core.config.get().data, 200)
-
 
 @app.route("/api/get_tests", methods=["GET"])
 def get_tests():
