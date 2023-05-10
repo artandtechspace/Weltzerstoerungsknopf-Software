@@ -1,11 +1,10 @@
 from loggingsystem.Logger import Logger
-import RPi.GPIO as GPIO
 import asyncio as aio
-
+from utils.GPIOUtil import is_pressed
 
 # Only a data class
 class ButtonState:
-    def __init__(self, pin: int, required: bool):
+    def __init__(self, pin: (int, bool), required: bool):
         self.pin = pin
         self.required = required
 
@@ -26,7 +25,7 @@ class ButtonListener:
     
     :return a unique id per registered state to later compare with which state did trigger
     '''
-    def wait_for_change(self, pin: int, to: bool = True):
+    def wait_for_change(self, pin: (int, bool), to: bool = True):
         # Registers the button state
         state = ButtonState(pin, to)
         self.registered_states.append(state)
@@ -46,7 +45,7 @@ class ButtonListener:
             # Checks every registered state
             for state in self.registered_states:
                 # Checks the button state
-                if GPIO.input(state.pin) == state.required:
+                if is_pressed(state.pin) == state.required:
                     return state.pin
 
 

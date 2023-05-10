@@ -1,7 +1,7 @@
 from peripherals.PeripheralConfig import Outputs
 from loggingsystem.Logger import Logger
-import RPi.GPIO as GPIO
 import asyncio as aio
+from RPi import GPIO
 
 class SmokeDevice:
 

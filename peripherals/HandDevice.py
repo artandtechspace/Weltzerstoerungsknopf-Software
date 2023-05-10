@@ -2,6 +2,7 @@ from peripherals.PeripheralConfig import Outputs, Inputs
 from loggingsystem.Logger import Logger
 import RPi.GPIO as GPIO
 import asyncio as aio
+from utils.GPIOUtil import is_pressed, setup_as_inputs
 
 
 class HandDevice:
@@ -16,10 +17,10 @@ class HandDevice:
             Outputs.Hand.GPIO_ENABLED
         ], GPIO.OUT, initial=GPIO.LOW)
         # Inputs
-        GPIO.setup([
+        setup_as_inputs([
             Inputs.Hand.GPIO_HAND_END_SWITCH,
             Inputs.Buttons.GPIO_PRIME_SWITCH
-        ], GPIO.IN)
+        ])
 
     # Stops any hand movement
     def stop(self):
@@ -44,7 +45,7 @@ class HandDevice:
 
             # Waits until the end-switch, which here is also the prime-button,
             # has been pressed
-            while GPIO.input(Inputs.Buttons.GPIO_PRIME_SWITCH):
+            while is_pressed(Inputs.Buttons.GPIO_PRIME_SWITCH):
                 await aio.sleep(0.0001)
 
             self.logger.debug("move_outside", "Reached end, stopping")
@@ -67,7 +68,7 @@ class HandDevice:
             GPIO.output(Outputs.Hand.GPIO_OUT, 0)
 
             # Waits until the end-switch for closing has been pressed
-            while not GPIO.input(Inputs.Hand.GPIO_HAND_END_SWITCH):
+            while not is_pressed(Inputs.Hand.GPIO_HAND_END_SWITCH):
                 await aio.sleep(0.0001)
 
             self.logger.debug("move_inside", "Reached end, stopping")

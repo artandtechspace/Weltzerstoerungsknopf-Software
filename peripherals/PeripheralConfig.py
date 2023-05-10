@@ -2,24 +2,28 @@
 Input peripherials
 '''
 
+# Used for inverted inputs
+INVERTED = True
+NOT_INVERTED = False
+
 
 class InternalInputs_Scissors:
     # GPIO-Pins for the end-switches for the scissors on a position
-    GPIO_OPEN = 19
-    GPIO_CLOSE = 6
+    GPIO_OPEN = (19, NOT_INVERTED)
+    GPIO_CLOSE = (6, NOT_INVERTED)
 
 
 class InternalInputs_Buttons:
     # GPIO-pins for the user buttons
     # Main fire-button to start the destruction
-    GPIO_FIRE_BUTTON = 17
+    GPIO_FIRE_BUTTON = (17, INVERTED)
     # Prime switch to prepare the main switch
-    GPIO_PRIME_SWITCH = 5
+    GPIO_PRIME_SWITCH = (5, INVERTED)
 
 
 class InternalInputs_Hand:
     # GPIO-Pin for the end-switch of the hand (Inside end switch, outside is the normal prime-button)
-    GPIO_HAND_END_SWITCH = 27
+    GPIO_HAND_END_SWITCH = (27, INVERTED)
 
 
 # General input-pin definitions
