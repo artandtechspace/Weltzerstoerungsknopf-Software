@@ -16,6 +16,7 @@ class ConfigSystem:
         'counter': All(int, Clamp(0)),
         'text': str,
         'event': str,
+        'useSmoker': bool
     })
 
     def __init__(self):
@@ -24,6 +25,7 @@ class ConfigSystem:
             'counter': 0,
             'text': 'Sie sind der %counter%. der auf %event% die Welt zerstoeren wollte.',
             'event': "der Makerfaire",
+            'useSmoker': True
         })
         pass
 
@@ -39,7 +41,7 @@ class ConfigSystem:
                 Config.from_path(self.__config_file_location, parser="json", optional=True)
             )
         except Exception as e:
-            self.logger.error("initialize", ["Failed to load config file...", e])
+            self.logger.error_with_exception("initialize", "Failed to load config file...", e)
 
     '''
     Takes in a raw object that should be a config, validates it and applies it to the current config
@@ -58,7 +60,7 @@ class ConfigSystem:
             self.__config += custom_cfg
             return True
         except Exception as e:
-            self.logger.error("try_add_custom", ["Failed to append config file...", e])
+            self.logger.error_with_exception("try_add_custom", "Failed to append config file...", e)
             return False
 
     '''
@@ -70,7 +72,7 @@ class ConfigSystem:
             with open(self.__config_file_location, "w") as f:
                 json.dump(self.__config.data, f)
         except Exception as e:
-            self.logger.error("save", ["Failed to save file...", e, self.__config_file_location])
+            self.logger.error_with_exception("save", "Failed to save file...", e)
             return False
 
     # Returns the config to get/edit data
