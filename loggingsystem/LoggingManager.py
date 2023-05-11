@@ -29,23 +29,34 @@ class LoggingManager:
     # Array-index inside the __logs array where the file last left of
     __file_ptr: int = 0
 
+    @staticmethod
+    def get_logs_as_json():
+        return list(map(lambda x: x.as_json(), LoggingManager.__logs))
+
     # Used by the loggers to register messages
     @staticmethod
     def on_message_log(type: LogType, logger_name: str, func_name: str, message: str):
-        # Appends the log
-        LoggingManager.__logs.append(LogMessage(
+
+        # Creates the log
+        log = LogMessage(
             LoggingManager.__log_counter,
             type,
             logger_name,
             func_name,
             message
-        ))
+        )
+
+        # Appends the log
+        LoggingManager.__logs.append(log)
 
         # Increments the log-counter
         LoggingManager.__log_counter += 1
 
         # Moves the "dirty" file pointer forwards
         LoggingManager.__file_ptr += 1
+
+        from webserver.WebProgram import broadcast_log
+        broadcast_log(log.as_json())
         pass
 
     # Starts the timer to write logs every x seconds
@@ -59,12 +70,13 @@ class LoggingManager:
             while True:
                 LoggingManager.write_to_disk_and_flush()
                 await asyncio.sleep(save_delay_time)
+                LoggingManager.on_message_log(LogType.INFO, "LogManager", "start_async_writer", "test lul")
 
         # Runs the writer tasks
         asyncio.run(start_async_writer())
 
     '''
-    Writes the log to disk and ensures that the logging-buffer is not longer than at most 200 messages
+    Writes the log to disk and ensures that the logging-buffer is not longer than at most x messages
     '''
 
     @staticmethod
@@ -82,10 +94,10 @@ class LoggingManager:
             # Flushes the data
             fp.flush()
 
-        # Ensures no more than 200 logs are kept in memory
-        if len(LoggingManager.__logs) > 200:
-            # Flushes all logs that are over 200
-            LoggingManager.__logs = LoggingManager.__logs[(len(LoggingManager.__logs) - 200):]
+        # Ensures no more than x logs are kept in memory
+        if len(LoggingManager.__logs) > 50:
+            # Flushes all logs that are over 50
+            LoggingManager.__logs = LoggingManager.__logs[(len(LoggingManager.__logs) - 50):]
 
         # Resets the dirty-logs ptr
         LoggingManager.__file_ptr = 0

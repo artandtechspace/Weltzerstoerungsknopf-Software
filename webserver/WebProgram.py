@@ -3,10 +3,13 @@ import asyncio
 from flask import Flask, jsonify, request, Response
 from MainProgram import MainProgram
 from core.CoreData import CoreData
-from peripherals.tests.PeripheralTestTypes import PeripheralTestType
+from peripherals.tests.PeripheralTestTypes import PeripheralTestType,as_json
+from flask_socketio import SocketIO, emit
+from loggingsystem.LoggingManager import LoggingManager
 
 # Flask-app
 app = Flask("Weltzerstörungsknopf-Webaccess")
+socketio = SocketIO(app, cors_allowed_origins='*')
 
 # References to the main program and core-data
 main_program: MainProgram  # Will be willed as soon as the server starts
@@ -60,15 +63,19 @@ async def update_config():
 async def get_config():
     return create_cors_resp(core.config.get().data, 200)
 
+
 @app.route("/api/get_tests", methods=["GET"])
 def get_tests():
     # Collects all peripheral-device test-types
-    names = []
+    tests_json = {}
 
     for dev in PeripheralTestType:
-        names.append(dev.value[0])
+        # Gets the data
+        name = dev.value[0]
+        # Appends the test
+        tests_json[name] = as_json(dev)
 
-    return create_cors_resp(names, 200)
+    return create_cors_resp(tests_json, 200)
 
 
 @app.route("/api/start_test", methods=["POST", "OPTIONS"])
@@ -95,9 +102,20 @@ async def start_tests():
     return create_cors_resp({"message": "tests can not be found"}, 405)
 
 
+@socketio.on('connect', namespace="/logs")
+def connect():
+    # Sends all logs that existed up until that point
+    emit('inital', LoggingManager.get_logs_as_json())
+
+
+# Broadcasts a new log to all systems
+def broadcast_log(log: object):
+    socketio.emit("log", log, namespace="/logs")
+
+
 # Start-function for the web-thread to run the webserver
 def run_web_thread(prog: MainProgram, cr: CoreData):
     global main_program, core
     main_program = prog
     core = cr
-    app.run(debug=False, use_reloader=False, host= '0.0.0.0')
+    socketio.run(app, debug=False, use_reloader=False, host='0.0.0.0', allow_unsafe_werkzeug=True)

@@ -20,3 +20,13 @@ class LogMessage:
             self.func_name,
             self.message
         )
+
+    # Returns the log as a json-serializable object
+    def as_json(self):
+        return {
+            "type": self.log_type.value,
+            "logger": self.logger_name,
+            "func": self.func_name,
+            "msg": self.message,
+            "time": self.log_time
+        }
