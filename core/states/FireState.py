@@ -64,15 +64,15 @@ async def start_fire_state(core: CoreData):
     # Plays the fire animation
     await core.animations.start_animation(__on_fire_animation)
 
-    # Runs the smoker for a second
-    tsmoker = core.smoker.run_for(1)
+    # Runs the smoker for a second (or just waits if the smoker is disabled)
+    if core.config.get().useSmoker:
+        await core.smoker.run_for(1)
+    else:
+        await aio.sleep(1)
 
     # Moves the hand out and in again
     await core.hand.move_outside()
     await core.hand.move_inside()
-
-    # Ensures the smoker has finished his operation
-    await tsmoker
 
     # Increments the counter and saves the config
     core.config.get().counter += 1
