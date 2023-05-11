@@ -70,7 +70,6 @@ class LoggingManager:
             while True:
                 LoggingManager.write_to_disk_and_flush()
                 await asyncio.sleep(save_delay_time)
-                LoggingManager.on_message_log(LogType.INFO, "LogManager", "start_async_writer", "test lul")
 
         # Runs the writer tasks
         asyncio.run(start_async_writer())
