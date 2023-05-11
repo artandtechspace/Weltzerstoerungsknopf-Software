@@ -1,0 +1,4 @@
+[submodule "rsc/webpage/Weltzerstoerungsknopf-Configinterface"]
+	path = rsc/webpage/Weltzerstoerungsknopf-Configinterface
+	url = https://github.com/artandtechspace/Weltzerstoerungsknopf-Configinterface.git
+    branch = build

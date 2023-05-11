@@ -1,11 +1,12 @@
 import asyncio
 
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response, send_from_directory
 from MainProgram import MainProgram
 from core.CoreData import CoreData
-from peripherals.tests.PeripheralTestTypes import PeripheralTestType,as_json
+from peripherals.tests.PeripheralTestTypes import PeripheralTestType, as_json
 from flask_socketio import SocketIO, emit
 from loggingsystem.LoggingManager import LoggingManager
+import os
 
 # Flask-app
 app = Flask("Weltzerstörungsknopf-Webaccess")
@@ -14,6 +15,11 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 # References to the main program and core-data
 main_program: MainProgram  # Will be willed as soon as the server starts
 core: CoreData
+
+
+# Returns the webserver directory
+def webserver_dir():
+    return os.path.abspath(os.path.dirname(__file__)) + "/../rsc/webpage/Weltzerstoerungsknopf-Configinterface"
 
 
 # Takes in an object, converts it to a request and adds the required cors headers
@@ -106,6 +112,18 @@ async def start_tests():
 def connect():
     # Sends all logs that existed up until that point
     emit('inital', LoggingManager.get_logs_as_json())
+
+
+# Serves the web-app for configuration
+@app.route('/<path:filename>')
+def access_webapp(filename):
+    return send_from_directory(webserver_dir(), filename)
+
+
+# Directly serves the index-html when only requesting the root
+@app.route('/')
+def webapp_quality_of_life():
+    return send_from_directory(webserver_dir(), "index.html")
 
 
 # Broadcasts a new log to all systems
