@@ -1,6 +1,6 @@
 import asyncio
 
-from flask import Flask, jsonify, request, Response, send_from_directory
+from flask import Flask, jsonify, request, Response, send_from_directory, redirect
 from MainProgram import MainProgram
 from core.CoreData import CoreData
 from peripherals.tests.PeripheralTestTypes import PeripheralTestType, as_json
@@ -113,17 +113,24 @@ def connect():
     # Sends all logs that existed up until that point
     emit('inital', LoggingManager.get_logs_as_json())
 
-
 # Serves the web-app for configuration
-@app.route('/<path:filename>')
+@app.route('/app/<path:filename>')
 def access_webapp(filename):
     return send_from_directory(webserver_dir(), filename)
 
+# The following routes are only for quality of service to ensure the app is always loaded
 
-# Directly serves the index-html when only requesting the root
-@app.route('/')
-def webapp_quality_of_life():
+@app.route('/app/')
+def qos_app():
     return send_from_directory(webserver_dir(), "index.html")
+
+@app.route('/<path:filename>')
+def qos_app2(filename):
+    return redirect("/app/")
+
+@app.route('/')
+def qos_app3():
+    return redirect("/app/")
 
 
 # Broadcasts a new log to all systems
@@ -136,4 +143,4 @@ def run_web_thread(prog: MainProgram, cr: CoreData):
     global main_program, core
     main_program = prog
     core = cr
-    socketio.run(app, debug=False, use_reloader=False, host='0.0.0.0', allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=False, use_reloader=False, host='0.0.0.0', allow_unsafe_werkzeug=True, port=5000)
