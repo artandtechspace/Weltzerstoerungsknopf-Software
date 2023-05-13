@@ -10,10 +10,10 @@ async def __on_armed_animation(pxls: neopixel.NeoPixel):
         await aio.sleep(1)
         pxls.fill((70, 1, 1))
         pxls.show()
-        await aio.sleep(0.8)
+        await aio.sleep(0.5)
         pxls.fill((0, 0, 0))
         pxls.show()
-        await aio.sleep(0.8)
+        await aio.sleep(0.5)
 
 
 async def start_armed_state(core: CoreData):

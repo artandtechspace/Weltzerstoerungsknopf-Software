@@ -118,7 +118,8 @@ def connect():
 def access_webapp(filename):
     return send_from_directory(webserver_dir(), filename)
 
-# The following routes are only for quality of service to ensure the app is always loaded
+# The following routes provide quality of service redirections and
+# ensure that capture portal requests are directed to the app
 
 @app.route('/app/')
 def qos_app():
