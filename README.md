@@ -1,5 +1,5 @@
 # Weltzerstörungsknopf
-Was der Weltzerstörungskopf ist und eine genaue Dokumentation des Systems findet man [hier](https://github.com/artandtechspace/Weltzerstoerungsknopf-Documentation).
+Was der Weltzerstörungskopf ist und eine genaue Dokumentation des Systems findet man [hier](https://github.com/artandtechspace/Weltzerstoerungsknopf-Dokumentation).
 
 # Entwicklungsumgebung aufsetzen
 Die Hauptsoftware wurde in Python3.9 entwickelt, daher wird empfohlen eine entsprechende IDE zu installieren. Wir haben dafür [PyCharm Community](https://www.jetbrains.com/pycharm/) genommen, da es aktuelle und entsprechende Funktionen biete und Quelloffen ist. Aber jede andere Entwicklungsumgebung geht selbstverständlich auch.
