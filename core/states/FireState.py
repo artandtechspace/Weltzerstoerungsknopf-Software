@@ -67,9 +67,10 @@ async def start_fire_state(core: CoreData):
     # Runs the smoker for a second (or just waits if the smoker is disabled)
     if core.config.get().useSmoker:
         # Starts the task that will finish in the future
-        _ = core.smoker.run_for(5)
+        await core.smoker.run_for(0.5)
+        await aio.sleep(0.5)
     else:
-        await aio.sleep(2)
+        await aio.sleep(1)
 
     # Moves the hand out and in again
     await core.hand.move_outside()
