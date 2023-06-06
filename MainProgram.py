@@ -29,6 +29,9 @@ class MainProgram:
 
     # Async-io start method that continuously run the next state after the previous one has finished
     async def __on_run(self, core: CoreData):
+        # Initializes the core-data
+        core.initialize()
+
         while True:
             self.logger.state_switch("main", str(self.__function_ptr.__name__))
 

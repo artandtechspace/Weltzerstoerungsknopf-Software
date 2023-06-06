@@ -23,7 +23,7 @@ class ConfigSystem:
         # Loads the defaults
         self.__config = Config({
             'counter': 0,
-            'text': 'Sie sind der %counter%. der auf %event% die Welt zerstoeren wollte.',
+            'text': 'Sie sind der %counter%, der auf %event% die Welt zerstoeren wollte.',
             'event': "der Makerfaire",
             'useSmoker': True
         })
@@ -36,6 +36,8 @@ class ConfigSystem:
 
     def initialize(self):
         try:
+            self.logger.debug("initialize", "Loading config from path '"+str(self.__config_file_location)+"'")
+
             # Tries to load the config
             self.try_add_custom(
                 Config.from_path(self.__config_file_location, parser="json", optional=True)
